@@ -7,7 +7,7 @@ import { SchedulerTypes } from 'dojo-sdk/build/Scheduler/CronScheduler';
 import { BaseService } from 'dojo-sdk/build/Servicer/BaseService';
 import { IRequest, IResponse, ResponseTypes } from 'dojo-sdk/build/Servicer/Request';
 
-// run: node build/examples/exampleRecipe.js
+// run: `$ node build/recipes/intro or `$ yarn test src/recipes/intro`
 export class Recipe_Intro extends BaseRecipe {
     public problemStatement = `
     ========================================
@@ -70,7 +70,7 @@ export class Recipe_Intro extends BaseRecipe {
     }
 }
 
-// Run this interactively if executed via `$ node build/Recipes/<recipe-name>/`
+// Run this interactively if executed via `$ node build/recipes/intro`
 if (node.isCalledDirectly()) {
     node.catchErrors();
     (async () => {

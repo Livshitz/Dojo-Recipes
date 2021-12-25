@@ -8,7 +8,7 @@ import { BaseService } from 'dojo-sdk/build/Servicer/BaseService';
 import { IRequest, IResponse, ResponseTypes } from 'dojo-sdk/build/Servicer/Request';
 import { ServiceProxy } from 'dojo-sdk/build/Servicer/ServiceProxy';
 
-// run: node build/examples/exampleRecipe.js
+// run: `$ node build/recipes/intro/solution.js or `$ yarn test src/recipes/intro`
 export class Recipe_Intro extends BaseRecipe {
     public constructor(options?: Partial<BaseRecipeOptions>) {
         super(options);
