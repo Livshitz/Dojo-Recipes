@@ -25,7 +25,7 @@
         "*.ts"
     ],
     "dependencies": {
-        "dojo-sdk": "^0.4.1"
+        "dojo-sdk": "^0.4.4"
     },
     "devDependencies": {
         "@types/jest": "^26.0.20",

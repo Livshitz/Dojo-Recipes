@@ -6,15 +6,10 @@ import { MemoryPersistencyManager } from 'dojo-sdk/build/DB/PersistencyManagers/
 import { SchedulerTypes } from 'dojo-sdk/build/Scheduler/CronScheduler';
 import { BaseService } from 'dojo-sdk/build/Servicer/BaseService';
 import { IRequest, IResponse, ResponseTypes } from 'dojo-sdk/build/Servicer/Request';
+import { ServiceProxy } from 'dojo-sdk/build/Servicer/ServiceProxy';
 
 // run: node build/examples/exampleRecipe.js
 export class Recipe_Intro extends BaseRecipe {
-    public problemStatement = `
-    ========================================
-    This is where you describe the challenge.
-    ========================================
-    `;
-
     public constructor(options?: Partial<BaseRecipeOptions>) {
         super(options);
 
@@ -32,15 +27,26 @@ export class Recipe_Intro extends BaseRecipe {
                 },
             },
         };
-        await this.matrix.addDB(new MemoryPersistencyManager(), initData, { continuosWrite: true });
+        const db = await this.matrix.addDB(new MemoryPersistencyManager(), initData, { continuosWrite: true });
 
         this.matrix.addScheduler(
-            '*/5 * * * * *',
+            '*/1 * * * * *',
             async () => {
-                log.i('tick');
+                const content = await db.get('myCol', '112233');
+                log.v('tick', content);
+                thisRecipe.journal.emit('db-' + content.b);
+                db.delete('myCol', '112233');
             },
             SchedulerTypes.Recurring
         );
+
+        const mq = await this.matrix.addMQ('queue1', {
+            treat: (item) => {
+                log.v('This is my consumer treating item: ', item.payload.b);
+                thisRecipe.journal.emit('mq-' + item.payload.b);
+                db.insert('myCol', { _id: '112233', ...item.payload });
+            },
+        });
 
         const thisRecipe = this;
         this.matrix.addService(
@@ -48,9 +54,10 @@ export class Recipe_Intro extends BaseRecipe {
             () =>
                 new (class extends BaseService {
                     async handle(req: IRequest, res: IResponse) {
-                        log.i('Service:', req);
+                        log.v('Service:', req);
                         thisRecipe.journal.emit('request');
-                        res.body = { a: `hello!? from ${this.identifier}` };
+                        mq.enqueue({ a: `hello!? from ${this.identifier}`, b: 11 });
+                        res.body = 'message was enqueued';
                         res.type = ResponseTypes.OK;
                         return res;
                     }
@@ -58,8 +65,6 @@ export class Recipe_Intro extends BaseRecipe {
             1,
             10
         );
-
-        // this.matrix.setupServiceProxy(); // pass calls through: http://localhost:3000/test?q=1
 
         this.journal.emit('setup:end');
     }
@@ -70,13 +75,16 @@ export class Recipe_Intro extends BaseRecipe {
     }
 }
 
-// Run this interactively if executed via `$ node build/Recipes/<recipe-name>/`
+// Run this interactively if executed via `$ node build/recipes/intro`
 if (node.isCalledDirectly()) {
     node.catchErrors();
     (async () => {
         const recipe = new Recipe_Intro();
         await recipe.setup();
         recipe.run();
+
+        const proxyServer = new ServiceProxy(recipe.matrix, { port: 3000 }); // pass calls through: http://localhost:3000/test?q=1
+        await proxyServer.init();
 
         await node.prompts.waitForAnyKey('Press any key to finish this recipe...', false);
 

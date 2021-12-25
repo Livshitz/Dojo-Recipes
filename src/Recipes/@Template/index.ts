@@ -5,7 +5,7 @@ import { DiskPersistencyManager } from 'dojo-sdk/build/DB/PersistencyManagers/Di
 import { MemoryPersistencyManager } from 'dojo-sdk/build/DB/PersistencyManagers/Memory';
 import { SchedulerTypes } from 'dojo-sdk/build/Scheduler/CronScheduler';
 import { BaseService } from 'dojo-sdk/build/Servicer/BaseService';
-import { IRequest, IResponse } from 'dojo-sdk/build/Servicer/Request';
+import { IRequest, IResponse, ResponseTypes } from 'dojo-sdk/build/Servicer/Request';
 
 // run: node build/examples/exampleRecipe.js
 export class Recipe_Name extends BaseRecipe {
@@ -32,9 +32,9 @@ export class Recipe_Name extends BaseRecipe {
                 },
             },
         };
-        await this.master.addDB(new MemoryPersistencyManager(), initData, { continuosWrite: true });
+        await this.matrix.addDB(new MemoryPersistencyManager(), initData, { continuosWrite: true });
 
-        this.master.addScheduler(
+        this.matrix.addScheduler(
             '*/5 * * * * *',
             async () => {
                 log.i('tick');
@@ -42,21 +42,24 @@ export class Recipe_Name extends BaseRecipe {
             SchedulerTypes.Recurring
         );
 
-        this.master.addService(
+        const thisRecipe = this;
+        this.matrix.addService(
             '/test',
             () =>
                 new (class extends BaseService {
                     async handle(req: IRequest, res: IResponse) {
                         log.i('Service:', req);
+                        thisRecipe.journal.emit('request');
                         res.body = { a: `hello!? from ${this.identifier}` };
-                        // super.handle(req);
+                        res.type = ResponseTypes.OK;
+                        return res;
                     }
                 })(),
             1,
             10
         );
 
-        // this.master.setupServiceProxy(); // pass calls through: http://localhost:3000/test?q=1
+        // this.matrix.setupServiceProxy(); // pass calls through: http://localhost:3000/test?q=1
 
         this.journal.emit('setup:end');
     }
@@ -67,7 +70,7 @@ export class Recipe_Name extends BaseRecipe {
     }
 }
 
-// Run this if executed via `$ node build/Recipes/<recipe-name>/`
+// Run this interactively if executed via `$ node build/Recipes/<recipe-name>/`
 if (node.isCalledDirectly()) {
     node.catchErrors();
     (async () => {

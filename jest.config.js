@@ -1,3 +1,5 @@
+// process.env.TZ = 'UTC';
+
 module.exports = {
     roots: [
         "<rootDir>"
@@ -6,7 +8,7 @@ module.exports = {
         "^.+\\.jsx?$": "babel-jest",
         "^.+\\.ts?$": "ts-jest"
     },
-    testRegex: "(/__tests__/.*|/tests/.*(\\.|/)(test|spec))\\.ts$",
+    testRegex: "(/__tests__/.*|/tests/.*(\\.|/)(test|spec))\\.ts$|/src/.*\.test\.ts",
     moduleFileExtensions: [
         "ts",
         "tsx",
@@ -20,9 +22,5 @@ module.exports = {
     coverageDirectory: ".tmp/coverage",
     transformIgnorePatterns: [
         "<rootDir>/node_modules/(?!libx\.js/.*)"
-    ],
-    coverageReporters: [
-        "cobertura",
-        "html"
     ],
 }

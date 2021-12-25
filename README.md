@@ -15,7 +15,57 @@ The purpose of those Recipes is educational and for practicing real-world challe
 
 
 ## Recipes:
-Read more [here](/src/Recipes/).
+1. [Intro](/src/recipes/intro)
+1. [Email Scheduler](/src/recipes/emailScheduler)
+1. [Report Generator](/src/recipes/reportGenerator)
+1. Rate Limiter in MicroService Environment
+1. URL shortener system
+1. File sharing service
+1. Social feed system
+1. Ride-sharing service like Uber or Lyft
+1. Elevator of the Lift system
+1. Blockchain network as distributed transactional database
+1. Online e-commerce store
+1. BE for Messaging App
+1. Push-notifications system for news feed app
+1. Event-sourcing and CQRS system
+
+
+----
+
+## Use:
+### Install:
+```
+$ yarn add dojo-sdk
+or
+$ npm install --save dojo-sdk   
+```
+
+### Develop:
+
+#### Init new scaffold:
+
+#### Build:
+
+> `$ yarn build`
+
+#### Watch & Build:
+
+> `$ yarn watch`
+
+#### Run tests:
+
+> `$ yarn test <optional: path-to-test-file>`
+
+#### Debug:
+
+> ` Select 'typescript' debug configuration, open file in vscode (to run it specifically) and run debugger`
+
+or:
+
+> ` Select 'Node Attach' debug configuration, run specific file in debug mode (you can pass also args):`
+
+> `$ node --inspect build/Main.js`
 
 
 ## Credits:
