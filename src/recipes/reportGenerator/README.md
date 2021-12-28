@@ -5,6 +5,7 @@ You have a website that presents a page and a list of items. This list is pagina
 The ask is to add a new button, "Download as CSV" that will generate a report of all of the underlying data and will send to user's email as a single file, regardless of size.  
 Assume there're millions of records in the DB that are part of a single report, the request to the DB itself might take a while.  
 The user clicks on the button and the generated report will be sent to his email.
+Your job is to create a BE system that supports and handles carrying such heavy jobs.
 
 ## Recipe:
 1. HTTP micro service
