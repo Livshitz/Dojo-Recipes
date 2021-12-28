@@ -16,8 +16,8 @@ The purpose of those Recipes is educational and for practicing real-world challe
 
 ## Recipes:
 1. [Intro](/src/recipes/intro)
-1. [Email Scheduler](/src/recipes/emailScheduler)
 1. [Report Generator](/src/recipes/reportGenerator)
+1. [Email Scheduler](/src/recipes/emailScheduler)
 1. Rate Limiter in MicroService Environment
 1. URL shortener system
 1. File sharing service
@@ -29,6 +29,7 @@ The purpose of those Recipes is educational and for practicing real-world challe
 1. BE for Messaging App
 1. Push-notifications system for news feed app
 1. Event-sourcing and CQRS system
+1. Access control & Authorization system with reverse index
 
 
 ----
